@@ -1,9 +1,9 @@
 "use client";
 import { Box, Table, TableBody, TableRow, Typography } from '@mui/material';
-import OverviewCard from './components/OverviewCard';
-import DashboardSection from './components/DashboardSection';
-import { getRows } from './utils/getRows';
-import { dashboardSections } from './constants/dashboardSections';
+import OverviewCard from '../components/OverviewCard';
+import DashboardSection from '../components/DashboardSection';
+import { getRows } from '../utils/getRows';
+import { dashboardSections } from '../constants/dashboardSections';
 
 const HomePage = () => {
   const rows = getRows(dashboardSections);
