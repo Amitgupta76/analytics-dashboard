@@ -1,5 +1,10 @@
 import { Box, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Link from 'next/link';
+import {
+  sidebarButton,
+  activeButton,
+  sidebarText,
+} from '../styles/sidebarStyles';
 
 const Sidebar = () => {
   const menuItems = [
@@ -14,13 +19,19 @@ const Sidebar = () => {
     { text: 'Profile', href: '/profile' },
   ];
 
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+
   return (
-    <Box component="nav" sx={{ width: '200px', bgcolor: '#f5f5f5', p: 2 }}>
+    <Box component="nav">
       <List>
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
-            <ListItemButton component={Link} href={item.href}>
-              <ListItemText primary={item.text} />
+            <ListItemButton
+              component={Link}
+              href={item.href}
+              sx={currentPath === item.href ? activeButton : sidebarButton}
+            >
+              <ListItemText primary={item.text} sx={sidebarText} />
             </ListItemButton>
           </ListItem>
         ))}

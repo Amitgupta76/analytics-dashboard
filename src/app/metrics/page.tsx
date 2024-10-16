@@ -2,15 +2,16 @@
 import { Box, Menu, MenuItem, TextField, InputAdornment, Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import Sidebar from '../components/Sidebar';
 import MetricCard from '../components/MetricCard';
 import { metrics } from '../constants/metrics';
 import { getRows } from '../utils/getRows';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { useRouter } from 'next/navigation';
+import { searchFieldStyle, metricsGridStyle } from '../styles/metricsStyles'; 
+import { containerStyle, buttonStyle, sectionHeaderStyle } from '../styles/sharedStyles';
 
 const MetricsPage = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedMetric, setSelectedMetric] = useState<string | null>(null);
+  const [, setSelectedMetric] = useState<string | null>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
 
@@ -31,15 +32,18 @@ const MetricsPage = () => {
   const metricRows = getRows(metrics);
 
   return (
-    <Box sx={{ display: 'flex', p: 2 }}>
-      <Box sx={{ flex: 1 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h5" component="h2">Metrics</Typography>
+    <Box sx={containerStyle}>
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <Box sx={sectionHeaderStyle}>
+          <Typography variant="h4" component="h1">
+            Metrics
+          </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <TextField
               variant="outlined"
               size="small"
-              placeholder="Search"
+              placeholder="Search metrics..."
+              sx={searchFieldStyle}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -48,25 +52,23 @@ const MetricsPage = () => {
                 ),
               }}
             />
-            <Button variant="contained" color="primary" onClick={handleCreateMetric}>
-              Create a Metric
+            <Button variant="contained" color="primary" onClick={handleCreateMetric} sx={{ ...buttonStyle, mt: 0 }}>
+              Create Metric
             </Button>
           </Box>
         </Box>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-          {metricRows.map((row, rowIndex) => (
-            <Box key={rowIndex} sx={{ display: 'flex', gap: 2 }}>
-              {row.map((metric, index) => (
-                <MetricCard key={index} metric={metric} onMenuClick={handleMenuClick} />
-              ))}
-            </Box>
+
+        <Box sx={metricsGridStyle}>
+          {metricRows.flat().map((metric, index) => (
+            <MetricCard key={index} metric={metric} onMenuClick={handleMenuClick} />
           ))}
         </Box>
+
         <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
-          <MenuItem onClick={handleMenuClose}>View {selectedMetric}</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Edit {selectedMetric}</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Clone {selectedMetric}</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Delete {selectedMetric}</MenuItem>
+          <MenuItem onClick={handleMenuClose}>View</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Edit</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Clone</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
         </Menu>
       </Box>
     </Box>

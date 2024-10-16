@@ -1,11 +1,13 @@
 import { Paper, Typography } from '@mui/material';
+import { cardStyle } from '../styles/dashboardStyles';
 
 const OverviewCard = () => (
-  <Paper sx={{ p: 3, mb: 4, backgroundColor: '#f5f5f5' }}>
-    <Typography variant="h6">Overview</Typography>
-    <Typography variant="body1">
-      This is your central hub for navigating through different sections of the application.
-      Use the sidebar to explore various features including Reports, Analytics, Alerts, and more.
+  <Paper elevation={3} sx={cardStyle}>
+    <Typography variant="h5" component="div" gutterBottom>
+      Overview
+    </Typography>
+    <Typography variant="body2" color="text.secondary">
+      This section provides a high-level summary of key metrics and reports.
     </Typography>
   </Paper>
 );

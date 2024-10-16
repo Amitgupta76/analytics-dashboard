@@ -1,23 +1,26 @@
 import React from 'react';
 import { CssBaseline, Box, Container } from '@mui/material';
 import Sidebar from './components/Sidebar';
+import { containerStyle, sidebarStyle, mainContentStyle } from './styles/layoutStyles';
 
 const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <html lang="en">
-    <head>
-      <title>Home Page - Project</title>
-    </head>
-    <body>
-      <CssBaseline />
-      <Container maxWidth="lg" sx={{ display: 'flex', height: '100vh' }}>
-        <Sidebar />
-        <Box component="main" sx={{ flexGrow: 1, bgcolor: '#f9f9f9', p: 2 }}>
-          {children}
-        </Box>
-      </Container>
-    </body>
-  </html>
+      <head>
+        <title>Home Page - Project</title>
+      </head>
+      <body>
+        <CssBaseline />
+        <Container maxWidth="xl" sx={containerStyle}>
+          <Box component="nav" sx={sidebarStyle}>
+            <Sidebar />
+          </Box>
+          <Box component="main" sx={mainContentStyle}>
+            {children}
+          </Box>
+        </Container>
+      </body>
+    </html>
   );
 };
 

@@ -37,9 +37,15 @@ const MetricCreationForm = () => {
             </MenuItem>
           ))}
         </TextField>
-
-        <Button variant="contained" color="primary">Add Logic</Button>
-
+        <TextField
+          label="Create Logic"
+          variant="outlined"
+          required
+          value={metricName}
+          onChange={(e) => setMetricName(e.target.value)}
+        >
+          <Button variant="contained" color="primary">Add Logic</Button>
+        </TextField>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
           <Button variant="outlined" color="secondary">Cancel</Button>
           <Button variant="contained" color="primary">Save</Button>

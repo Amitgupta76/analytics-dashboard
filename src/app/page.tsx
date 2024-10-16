@@ -4,17 +4,23 @@ import OverviewCard from './components/OverviewCard';
 import DashboardSection from './components/DashboardSection';
 import { getRows } from './utils/getRows';
 import { dashboardSections } from './constants/dashboardSections';
+import { tableStyle } from './styles/dashboardStyles';
+import { containerStyle, sectionHeaderStyle } from './styles/sharedStyles';
 
 const HomePage = () => {
   const rows = getRows(dashboardSections);
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Welcome to the Project Dashboard
-      </Typography>
+    <Box sx={containerStyle}>
+      <Box sx={sectionHeaderStyle}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Welcome to the Project Dashboard
+        </Typography>
+      </Box>
+
       <OverviewCard />
-      <Table sx={{ width: '100%' }}>
+
+      <Table sx={tableStyle}>
         <TableBody>
           {rows.map((row, rowIndex) => (
             <TableRow key={rowIndex}>
