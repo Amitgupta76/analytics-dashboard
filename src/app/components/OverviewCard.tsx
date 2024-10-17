@@ -1,5 +1,5 @@
 import { Paper, Typography } from '@mui/material';
-import { cardStyle } from '../styles/dashboardStyles';
+import { cardStyle } from '../styles/sharedStyles';
 
 const OverviewCard = () => (
   <Paper elevation={3} sx={cardStyle}>

@@ -18,10 +18,4 @@ export const tableStyle: SxProps<Theme> = {
   borderSpacing: '12px',
 };
 
-export const cardStyle: SxProps<Theme> = {
-  p: 2,
-  boxShadow: 3,
-  borderRadius: 2,
-  bgcolor: 'background.paper',
-};
 
