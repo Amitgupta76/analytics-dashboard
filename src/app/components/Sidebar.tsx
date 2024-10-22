@@ -5,6 +5,7 @@ import {
   activeButton,
   sidebarText,
 } from '../styles/sidebarStyles';
+import { usePathname } from 'next/navigation';
 
 const Sidebar = () => {
   const menuItems = [
@@ -19,7 +20,7 @@ const Sidebar = () => {
     { text: 'Profile', href: '/profile' },
   ];
 
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+  const pathname = usePathname();
 
   return (
     <Box component="nav">
@@ -29,7 +30,7 @@ const Sidebar = () => {
             <ListItemButton
               component={Link}
               href={item.href}
-              sx={currentPath === item.href ? activeButton : sidebarButton}
+              sx={pathname === item.href ? activeButton : sidebarButton}
             >
               <ListItemText primary={item.text} sx={sidebarText} />
             </ListItemButton>

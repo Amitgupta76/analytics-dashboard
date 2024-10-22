@@ -14,6 +14,12 @@ export const sidebarButton: SxProps<Theme> = {
 };
 
 export const activeButton: SxProps<Theme> = {
+  m: 1,
+  px: 2,
+  py: 1.5,
+  borderRadius: '8px',
+  border: '2px solid black',
+  textAlign: 'center',
   backgroundColor: '#ffcdd2',
   '&:hover': {
     backgroundColor: '#ffb2af',
