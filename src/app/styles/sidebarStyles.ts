@@ -20,9 +20,9 @@ export const activeButton: SxProps<Theme> = {
   borderRadius: '8px',
   border: '2px solid black',
   textAlign: 'center',
-  backgroundColor: '#ffcdd2',
+  background: 'linear-gradient(45deg, #ffcdd2 30%, #ffb2af 90%)',
   '&:hover': {
-    backgroundColor: '#ffb2af',
+    background: 'linear-gradient(45deg, #ffb2af 30%, #ffcdd2 90%)',
   },
 };
 
