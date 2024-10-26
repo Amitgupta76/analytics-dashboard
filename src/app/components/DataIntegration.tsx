@@ -9,11 +9,16 @@ import DataCard from '../components/DataCard';
 import { cardGridStyle } from '../styles/dataIntegrationStyles';
 import { containerStyle, sectionHeaderStyle } from '../styles/sharedStyles';
 import { DATA_SOURCES, BUTTONS } from '../constants/dataIntegration';
+import { useRouter } from 'next/navigation';
 
 const DataIntegration: React.FC = () => {
   const [activeButton, setActiveButton] = useState<string>('csv');
   const handleButtonClick = (buttonId: string) => {
     setActiveButton(buttonId);
+  };
+  const router = useRouter();
+  const handleDatasourceAddition = () => {
+    router.push('/data-integration/datasource-addition');
   };
 
   const renderContent = () => {
@@ -69,6 +74,7 @@ const DataIntegration: React.FC = () => {
           color="primary"
           size="small"
           sx={{ marginLeft: 'auto', mt: 2 }}
+          onClick={handleDatasourceAddition}
         >
           Add Datasource
         </Button>

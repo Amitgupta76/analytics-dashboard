@@ -30,7 +30,7 @@ const Sidebar = () => {
             <ListItemButton
               component={Link}
               href={item.href}
-              sx={pathname === item.href ? activeButton : sidebarButton}
+              sx={pathname.startsWith(item.href) ? activeButton : sidebarButton}
             >
               <ListItemText primary={item.text} sx={sidebarText} />
             </ListItemButton>
