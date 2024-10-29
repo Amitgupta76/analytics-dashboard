@@ -17,3 +17,19 @@ export const dataCardStyle: SxProps<Theme> = {
     transform: 'scale(1.05)',
   },
 };
+
+export const uploadAreaStyle = {
+  width: "400px",
+  height: "300px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  border: "2px dashed #90CAF9",
+  borderRadius: 9,
+  backgroundColor: "#F5F5F5",
+  cursor: "pointer",
+  "&:hover": {
+    backgroundColor: "#E3F2FD",
+  },
+};

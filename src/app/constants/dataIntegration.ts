@@ -12,3 +12,5 @@ export const BUTTONS = [
   { id: 'webhook', label: 'Webhook' },
   { id: 'derived', label: 'Derived Datasource' },
 ];
+
+export const STEPS = ["Upload the Data File", "Map Fields"];

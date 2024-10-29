@@ -6,14 +6,19 @@ import { containerStyle, sidebarStyle, mainContentStyle } from './styles/layoutS
 import { usePathname } from 'next/navigation';
 
 const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const EXCLUDED_ROUTES = [
+    "/metrics/create",
+    "/data-integration/datasource-addition/upload-csv"
+  ];
   const pathname = usePathname();
+  const isExcludedRoute = EXCLUDED_ROUTES.includes(pathname);
   return (
     <html lang="en">
       <head>
         <title>Home Page - Project</title>
       </head>
       <body>
-        {pathname === '/metrics/create' ? (
+        {isExcludedRoute ? (
           children
         ) : (
           <><CssBaseline />
