@@ -25,18 +25,12 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { sectionHeaderStyle, buttonContainerStyle, containerStyle } from "../styles/sharedStyles";
-import { dataCardStyle, uploadAreaStyle } from "../styles/dataIntegrationStyles";
+import { dataCardStyle, fieldLabelCellStyle, headerCellStyle, menuItemStyle, selectStyle, switchContainerStyle, tableContainerStyle, uploadAreaStyle } from "../styles/dataIntegrationStyles";
 import Image from "next/image";
 import csvIcon from "../public/assets/csv.png";
 import uploadIcon from "../public/assets/upload.png";
-import { STEPS } from "@/app/constants/dataIntegration";
-
-const fieldTypes = ["String", "Float", "Integer", "Date"];
-const dateFormats = [
-  "dd/mm/yyyy", "mm/dd/yyyy", "yyyy/mm/dd",
-  "dd-mm-yyyy", "mm-dd-yyyy", "yyyy-mm-dd",
-  "dd.mm.yyyy", "mm.dd.yyyy", "yyyy.mm.dd"
-];
+import { DATEFORMATS, FIELDTYPES, STEPS } from "@/app/constants/dataIntegration";
+import { handleAsync } from "../utils/handleAsync";
 
 const CsvUploadAndMapping = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -45,6 +39,7 @@ const CsvUploadAndMapping = () => {
   const [headers, setHeaders] = useState<string[]>([]);
   const [, setFieldTypeSelections] = useState<string[]>([]);
   const [, setMandatoryFlags] = useState<boolean[]>([]);
+  const [columns, setColumns] = useState<any[]>([]);
   const router = useRouter();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,21 +53,62 @@ const CsvUploadAndMapping = () => {
   };
 
   const parseCSV = (file: File) => {
+    const previewRows: string[][] = [];
+    let headersSet = false;
+
     Papa.parse(file, {
-      complete: (result: { data: string[][]; }) => {
-        const rows = result.data as string[][];
-        const headers = rows[0] as string[];
-        const sampleRows = rows.slice(1, 3);
-        setHeaders(headers);
-        setCsvData(sampleRows);
-        setFieldTypeSelections(new Array(headers.length).fill("String"));
-        setMandatoryFlags(new Array(headers.length).fill(false));
+      worker: true,
+      step: (row, parser) => {
+        const rowData = row.data as string[];
+
+        if (!headersSet) {
+          initializeColumns(rowData);
+          headersSet = true;
+        } else if (previewRows.length < 2) {
+          previewRows.push(rowData);
+          setCsvData([...previewRows]);
+        }
+
+        if (previewRows.length >= 3) {
+          parser.abort();
+          setFieldTypeSelections(new Array(rowData.length).fill("String"));
+          setMandatoryFlags(new Array(rowData.length).fill(false));
+        }
       },
-      header: false,
-      skipEmptyLines: true
+      error: (error) => {
+        console.error("Error parsing CSV:", error);
+      },
+      skipEmptyLines: true,
     });
   };
 
+  const postSchema = async () => {
+    const schema = {
+      name: file?.name,
+      columns: columns,
+    };
+  
+    const [error, response] = await handleAsync(
+      fetch("https://endpoint", {
+        method: "POST",
+        headers: {
+          company_id: "22",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(schema),
+      }).then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+    );
+  
+    if (error) {
+      console.error("Error occurred:", error.message);
+    } else {
+      console.log("Schema posted successfully:", response);
+    }
+  };
+  
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => event.preventDefault();
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -99,6 +135,7 @@ const CsvUploadAndMapping = () => {
     if (activeStep < STEPS.length - 1) {
       setActiveStep(prev => prev + 1);
     } else {
+      postSchema();
       alert("CSV uploaded successfully!");
       router.push("/data-integration");
     }
@@ -110,11 +147,47 @@ const CsvUploadAndMapping = () => {
 
   const handleGoBack = () => router.back();
 
+  const initializeColumns = (rowData: string[]) => {
+    setHeaders(rowData);
+    const newColumns = rowData.map((header) => ({
+      column_name: header,
+      column_type: "string",
+      allow_null: true,
+      is_unique: false,
+      date_format: ""
+    }));
+    setColumns(newColumns);
+  };
+
+  const handleFieldTypeChange = (index: number, value: string) => {
+    const newColumns = [...columns];
+    newColumns[index].column_type = value;
+    setColumns(newColumns);
+  };
+
+  const handleDateFormatChange = (index: number, value: string) => {
+    const newColumns = [...columns];
+    newColumns[index].date_format = value;
+    setColumns(newColumns);
+  };
+
+  const handleAllowNullChange = (index: number, value: boolean) => {
+    const newColumns = [...columns];
+    newColumns[index].allow_null = !value;
+    setColumns(newColumns);
+  };
+
+  const handleUniqueChange = (index: number, value: boolean) => {
+    const newColumns = [...columns];
+    newColumns[index].is_unique = value;
+    setColumns(newColumns);
+  };
+
   const renderHeaderRow = () =>
     <TableRow>
-      <TableCell>Field label</TableCell>
+      <TableCell sx={fieldLabelCellStyle}>Field label</TableCell>
       {headers.map((header, index) => (
-        <TableCell key={index} align="center">
+        <TableCell key={index} sx={headerCellStyle}>
           {header}
         </TableCell>
       ))}
@@ -124,9 +197,13 @@ const CsvUploadAndMapping = () => {
     headers.map((_, index) => (
       <TableCell key={index} align="center">
         <FormControl fullWidth>
-          <Select defaultValue="String">
-            {fieldTypes.map((type) => (
-              <MenuItem key={type} value={type}>
+          <Select
+            sx={selectStyle}
+            defaultValue="String"
+            onChange={(e) => handleFieldTypeChange(index, e.target.value)}
+          >
+            {FIELDTYPES.map((type) => (
+              <MenuItem sx={menuItemStyle} key={type} value={type}>
                 {type}
               </MenuItem>
             ))}
@@ -139,10 +216,10 @@ const CsvUploadAndMapping = () => {
     headers.map((_, index) => (
       <TableCell key={index} align="center">
         <FormControl fullWidth>
-          <Select displayEmpty defaultValue="">
+          <Select sx={selectStyle} displayEmpty defaultValue="" onChange={(e) => handleDateFormatChange(index, e.target.value)}>
             <MenuItem value="">Please Select</MenuItem>
-            {dateFormats.map((format) => (
-              <MenuItem key={format} value={format}>
+            {DATEFORMATS.map((format) => (
+              <MenuItem sx={menuItemStyle} key={format} value={format}>
                 {format}
               </MenuItem>
             ))}
@@ -154,9 +231,9 @@ const CsvUploadAndMapping = () => {
   const renderUniqueMandatoryRow = () =>
     headers.map((_, index) => (
       <TableCell key={index} align="center">
-        <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
-          <Switch size="small" />
-          <Switch size="small" />
+        <div style={switchContainerStyle}>
+          <Switch size="small" onChange={(e) => handleUniqueChange(index, e.target.checked)} />
+          <Switch size="small" onChange={(e) => handleAllowNullChange(index, e.target.checked)} />
         </div>
       </TableCell>
     ));
@@ -164,7 +241,7 @@ const CsvUploadAndMapping = () => {
   const renderSampleDataRows = () =>
     csvData.map((row, rowIndex) => (
       <TableRow key={rowIndex}>
-        <TableCell>Sample data</TableCell>
+        <TableCell sx={fieldLabelCellStyle}>Sample data</TableCell>
         {row.map((cell, cellIndex) => (
           <TableCell key={cellIndex} align="center">
             {cell}
@@ -247,22 +324,22 @@ const CsvUploadAndMapping = () => {
         )}
 
         {activeStep === 1 && csvData.length > 0 && (
-          <TableContainer component={Paper} sx={{ mt: 2 }}>
+          <TableContainer component={Paper} sx={tableContainerStyle}>
             <Table>
               <TableHead>
                 {renderHeaderRow()}
               </TableHead>
               <TableBody>
                 <TableRow>
-                  <TableCell>Field type</TableCell>
+                  <TableCell sx={fieldLabelCellStyle}>Field type</TableCell>
                   {renderFieldTypeRow()}
                 </TableRow>
                 <TableRow>
-                  <TableCell>Date format</TableCell>
+                  <TableCell sx={fieldLabelCellStyle}>Date format</TableCell>
                   {renderDateFormatRow()}
                 </TableRow>
                 <TableRow>
-                  <TableCell>Unique/Mandatory</TableCell>
+                  <TableCell sx={fieldLabelCellStyle}>Unique/Mandatory</TableCell>
                   {renderUniqueMandatoryRow()}
                 </TableRow>
                 {renderSampleDataRows()}

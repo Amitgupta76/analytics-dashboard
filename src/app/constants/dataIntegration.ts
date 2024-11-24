@@ -14,3 +14,10 @@ export const BUTTONS = [
 ];
 
 export const STEPS = ["Upload the Data File", "Map Fields"];
+
+export const FIELDTYPES = ["String", "Float", "Integer", "Date"];
+export const DATEFORMATS = [
+  "dd/mm/yyyy", "mm/dd/yyyy", "yyyy/mm/dd",
+  "dd-mm-yyyy", "mm-dd-yyyy", "yyyy-mm-dd",
+  "dd.mm.yyyy", "mm.dd.yyyy", "yyyy.mm.dd"
+];
