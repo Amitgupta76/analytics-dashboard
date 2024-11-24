@@ -29,7 +29,7 @@ import { dataCardStyle, fieldLabelCellStyle, headerCellStyle, menuItemStyle, sel
 import Image from "next/image";
 import csvIcon from "../public/assets/csv.png";
 import uploadIcon from "../public/assets/upload.png";
-import { DATEFORMATS, FIELDTYPES, STEPS } from "@/app/constants/dataIntegration";
+import { DATEFORMATS, FIELDTYPES, STEPS } from "@/app/constants/dataHouse";
 import { handleAsync } from "../utils/handleAsync";
 
 const CsvUploadAndMapping = () => {
@@ -137,7 +137,7 @@ const CsvUploadAndMapping = () => {
     } else {
       postSchema();
       alert("CSV uploaded successfully!");
-      router.push("/data-integration");
+      router.push("/data-house");
     }
   };
 

@@ -5,20 +5,20 @@ import csv from "../public/assets/csv.png";
 import webhook from "../public/assets/webhook.png";
 import datasource from "../public/assets/datasource.png";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DataCard from '../components/DataCard';
+import DataCard from './DataCard';
 import { cardGridStyle } from '../styles/dataIntegrationStyles';
 import { containerStyle, sectionHeaderStyle } from '../styles/sharedStyles';
-import { DATA_SOURCES, BUTTONS } from '../constants/dataIntegration';
+import { DATA_SOURCES, BUTTONS } from '../constants/dataHouse';
 import { useRouter } from 'next/navigation';
 
-const DataIntegration: React.FC = () => {
+const DataHouse: React.FC = () => {
   const [activeButton, setActiveButton] = useState<string>('csv');
   const handleButtonClick = (buttonId: string) => {
     setActiveButton(buttonId);
   };
   const router = useRouter();
   const handleDatasourceAddition = () => {
-    router.push('/data-integration/datasource-addition');
+    router.push('/data-house/datasource-addition');
   };
 
   const renderContent = () => {
@@ -85,4 +85,4 @@ const DataIntegration: React.FC = () => {
   );
 };
 
-export default DataIntegration;
+export default DataHouse;

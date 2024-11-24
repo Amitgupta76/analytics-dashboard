@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 const DatasourceAdditionPage: React.FC = () => {
     const router = useRouter();
     const handleUploadCSV = () => {
-        router.push('/data-integration/datasource-addition/upload-csv');
+        router.push('/data-house/datasource-addition/upload-csv');
     };
 
     return (

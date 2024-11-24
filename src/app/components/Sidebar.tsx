@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Box, Divider, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Link from 'next/link';
 import {
   sidebarButton,
@@ -13,11 +13,13 @@ const Sidebar = () => {
     { text: 'Reports', href: '/reports' },
     { text: 'Analytics', href: '/analytics' },
     { text: 'Alerts', href: '/alerts' },
+    { text: 'Logs', href: '/logs' },
+  ];
+
+  const uploadItems = [
     { text: 'Metrics', href: '/metrics' },
-    { text: 'Data & Integration', href: '/data-integration' },
-    { text: 'Users', href: '/users' },
-    { text: 'Notifications', href: '/notifications' },
-    { text: 'Profile', href: '/profile' },
+    { text: 'DataHouse', href: '/data-house' },
+    { text: 'People', href: '/people' },
   ];
 
   const pathname = usePathname();
@@ -26,6 +28,20 @@ const Sidebar = () => {
     <Box component="nav">
       <List>
         {menuItems.map((item) => (
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton
+              component={Link}
+              href={item.href}
+              sx={pathname.startsWith(item.href) ? activeButton : sidebarButton}
+            >
+              <ListItemText primary={item.text} sx={sidebarText} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider sx={{ margin: '20px 0', borderColor: 'gray' }} />
+      <List>
+        {uploadItems.map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton
               component={Link}

@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const EXCLUDED_ROUTES = [
     "/metrics/create",
-    "/data-integration/datasource-addition/upload-csv"
+    "/data-house/datasource-addition/upload-csv"
   ];
   const pathname = usePathname();
   const isExcludedRoute = EXCLUDED_ROUTES.includes(pathname);
