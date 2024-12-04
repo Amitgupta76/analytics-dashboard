@@ -89,7 +89,7 @@ const CsvUploadAndMapping = () => {
     };
   
     const [error, response] = await handleAsync(
-      fetch("https://endpoint", {
+      fetch("https://divy-be-b0b661c9393a.herokuapp.com/datasource-schema", {
         method: "POST",
         headers: {
           company_id: "22",
@@ -136,8 +136,8 @@ const CsvUploadAndMapping = () => {
       setActiveStep(prev => prev + 1);
     } else {
       postSchema();
-      alert("CSV uploaded successfully!");
-      router.push("/data-house");
+      // alert("CSV uploaded successfully!");
+      // router.push("/data-house");
     }
   };
 
