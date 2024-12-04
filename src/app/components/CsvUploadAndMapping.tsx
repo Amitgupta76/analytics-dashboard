@@ -32,6 +32,14 @@ import uploadIcon from "../public/assets/upload.png";
 import { DATEFORMATS, FIELDTYPES, STEPS } from "@/app/constants/dataHouse";
 import { handleAsync } from "../utils/handleAsync";
 
+interface Column {
+  column_name: string;
+  column_type: string;
+  allow_null: boolean;
+  is_unique: boolean;
+  date_format?: string;
+}
+
 const CsvUploadAndMapping = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [file, setFile] = useState<File | null>(null);
@@ -39,7 +47,7 @@ const CsvUploadAndMapping = () => {
   const [headers, setHeaders] = useState<string[]>([]);
   const [, setFieldTypeSelections] = useState<string[]>([]);
   const [, setMandatoryFlags] = useState<boolean[]>([]);
-  const [columns, setColumns] = useState<any[]>([]);
+  const [columns, setColumns] = useState<Column[]>([]);
   const router = useRouter();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,6 +113,7 @@ const CsvUploadAndMapping = () => {
     if (error) {
       console.error("Error occurred:", error.message);
     } else {
+      alert("CSV uploaded successfully!");
       console.log("Schema posted successfully:", response);
     }
   };
@@ -136,8 +145,7 @@ const CsvUploadAndMapping = () => {
       setActiveStep(prev => prev + 1);
     } else {
       postSchema();
-      // alert("CSV uploaded successfully!");
-      // router.push("/data-house");
+      router.push("/data-house");
     }
   };
 
